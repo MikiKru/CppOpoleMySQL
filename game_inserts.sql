@@ -77,5 +77,49 @@ CREATE TABLE player_has_game(
 );
 
 
+# Łączenie gracza z grą
+select * from player;
+select * from game;
+select * from player_has_game;
+
+# Przypisz Johnowi gry ktore kupił o indeksach 5, 10, 15
+INSERT INTO player_has_game VALUES (default, 1, 5);
+INSERT INTO player_has_game VALUES (default, 1, 10);
+INSERT INTO player_has_game VALUES (default, 1, 15);
+
+# Janusz kupił grę nr 20
+INSERT INTO player_has_game VALUES (default, 6, 20);
+
+# Wyświetlenie danych pochodzących z wielu table
+SELECT
+	player.name,
+    player.lastname,
+	player.login,
+    player.country,
+    player.language,
+    game.name,
+    game.rating,
+    game.price,
+    game.releaseDate
+FROM					# złączenie wielu tabel na podstawie kluczy primary to forign
+	player 
+		join
+	player_has_game on (player.player_id = player_has_game.player_id)
+		join
+	game on (game.game_id = player_has_game.game_id);
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
