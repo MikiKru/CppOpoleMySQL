@@ -108,12 +108,36 @@ FROM					# złączenie wielu tabel na podstawie kluczy primary to forign
 		join
 	game on (game.game_id = player_has_game.game_id);
 	
+select * from player;
 
 
+# 1. Dodaj nowego gracza o dowolnych danych
+INSERT INTO player VALUES (default, "Anna","Nowy","Ano","Ano", "POL", default, "an@an.pl");
+# 2. Niech ten użytkownik kupi grę nr 1 i 3
+INSERT INTO player_has_game VALUES (default, 8, 1);
+INSERT INTO player_has_game VALUES (default, 8, 3);
+# 3. Zabierz wszystkie gry Johnowi
+DELETE FROM player_has_game WHERE player_id = 1;
+# 4. Zmień hasło Johna na xxx
+UPDATE player SET password = "xxx" WHERE player_id = 1;
+# *5. Zahashuj -> zaszyfruj hasła wszystkich graczy algorytmem md5()
+UPDATE player SET password = md5(password);
 
 
+# 6. Dodaj kolejnego użytkownika tak żeby miał hasahowane hasło
+INSERT INTO player VALUES (default, "Omar","Rzeznik","OmRze",md5("mmmm"), "KSA", default, "or@or.pl");
+select * from player;
 
-
+# LOGOWANIE GRACZA NA PODSTAWIE LOGINU I HASŁA MD5
+SELECT * FROM player WHERE login = "OmRze" AND password = md5("mmmm");
+ 
+# FUNKCJA DO LOGOWANIA GRACZA
+DROP FUNCTION login;
+CREATE FUNCTION login(input_login varchar(55), input_password varchar(512))
+	RETURNS bool DETERMINISTIC
+	RETURN (SELECT login is not null FROM player WHERE login = input_login AND password = md5(input_password));
+ 
+select if(login("OmRze","mmmm") is null, "niezalogowano", "zalogowano") as login_result;
 
 
 
