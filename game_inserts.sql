@@ -139,6 +139,56 @@ CREATE FUNCTION login(input_login varchar(55), input_password varchar(512))
  
 select if(login("OmRze","mmmm") is null, "niezalogowano", "zalogowano") as login_result;
 
+# 0. Utwórz aktualny kurs dolara w zmiennej toUSD
+SET @toUSD = (SELECT 3.99);
+
+# 1. Funkcja przeliczająca ceny gier na $3.99
+CREATE FUNCTION priceUSD(input_price double) 
+	RETURNS DOUBLE(9,2) DETERMINISTIC 
+    RETURN input_price / @toUSD; 
+
+SELECT *, priceUSD(price) as "PRICE USD" FROM game;
+
+# 1. Dodaj nową tabelę do bazy game_statistics przechowującą dane o grach 
+# game_logs
+# -> kto grał	id gracza
+# -> w co grał	id gry
+# -> kiedy grał data i czas
+# -> ile grał	minuty
+
+CREATE TABLE game_logs(
+	game_logs_id int primary key auto_increment,
+    player_id int not null,
+    game_id int not null,
+    start_date datetime not null,
+    time_interval int not null,
+	foreign key (player_id) references player (player_id),
+	foreign key (game_id) references game (game_id)    
+);
+select * from player_has_game;
+# 2. Dodaj następujące logi graczy
+# gracz id 8 grał w gre id 1 dziś o 9.00 przez 60 min  
+# gracz id 6 grał w gre id 20 wczoraj o 23.00 przez 120 min 
+insert into game_logs VALUES (default, 8, 1, "2019-12-09 09:00:00", 60);
+insert into game_logs VALUES (default, 8, 1, "2019-12-10 09:00:00", 160);
+insert into game_logs VALUES (default, 8, 1, "2019-12-11 09:00:00", 60);
+
+insert into game_logs VALUES (default, 6, 20, "2019-11-07 23:00:00", 120);
+insert into game_logs VALUES (default, 6, 20, "2019-10-07 23:00:00", 80);
+insert into game_logs VALUES (default, 6, 20, "2019-10-01 11:00:00", 40);
+insert into game_logs VALUES (default, 6, 20, "2019-11-02 12:00:00", 30);
+insert into game_logs VALUES (default, 6, 20, "2019-09-03 23:00:00", 220);
+insert into game_logs VALUES (default, 6, 20, "2019-07-04 20:00:00", 20);
+
+select *, date_format(start_date, '%d.%m.%Yr. (%H:%i)') as 'formatted_date' from game_logs;
+
+# Ile czasu wszyscy gracze poświęcili na naszej platformie
+SELECT sum(time_interval) as 'czas na platformie' FROM game_logs;
+
+# Ile czasu poświęcięcili wszyscy gracza na grze id 20
+
+
+# Oblicz ile czasu każdy z graczy spędził na naszej platformie
 
 
 
