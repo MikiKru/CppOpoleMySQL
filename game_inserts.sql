@@ -207,7 +207,51 @@ ORDER BY
 INSERT INTO player_has_game VALUES (default, 1, 5);
 insert into game_logs VALUES (default, 1, 5, "2019-09-03 23:00:00", 2020);
 
-# Ile każdy z graczy logował się na platformie
+# Ile razy każdy z graczy logował się na platformie
+SELECT 
+	player.name, 
+    player.lastname, 
+    player.login, 
+    ifnull(count(game_logs.time_interval),0) as 'czas na platformie' 
+FROM 
+	player 
+		left join
+	game_logs on (player.player_id = game_logs.player_id)
+GROUP BY 
+	player.login
+ORDER BY 
+	4 DESC;
+
+# Który gracz jest drugim najbardziej aktywnym na platformie
+SELECT 
+	player.name, 
+    player.lastname, 
+    player.login, 
+    ifnull(sum(game_logs.time_interval),0) as 'czas na platformie' 
+FROM 
+	player 
+		left join
+	game_logs on (player.player_id = game_logs.player_id)
+GROUP BY 
+	player.login
+ORDER BY 
+	4 DESC
+LIMIT
+	1
+OFFSET 
+	1;
+    
+# ile jest gier na naszej platformie
+SELECT count(*) as 'ilość' FROM game;
+
+SELECT * FROM player_has_game;
+# ile jest gier na naszej platformie które ktoś kupił
+SELECT count(distinct game_id) as 'ilość' FROM player_has_game;
+
+
+
+
+
 
 
 
