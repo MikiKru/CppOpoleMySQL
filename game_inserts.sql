@@ -185,14 +185,29 @@ select *, date_format(start_date, '%d.%m.%Yr. (%H:%i)') as 'formatted_date' from
 # Ile czasu wszyscy gracze poświęcili na naszej platformie
 SELECT sum(time_interval) as 'czas na platformie' FROM game_logs;
 
-# Ile czasu poświęcięcili wszyscy gracza na grze id 20
+# Ile czasu poświęcięcili wszyscy gracza na grze id 20 FNaF World
+SELECT sum(time_interval) as 'czas na platformie' FROM game_logs WHERE game_id = 20;
+
+# Oblicz ile czasu każdy z graczy spędził na naszej platformie jeżeli wczale to wypisz zero
+SELECT 
+	player.name, 
+    player.lastname, 
+    player.login, 
+    ifnull(sum(game_logs.time_interval),0) as 'czas na platformie' 
+FROM 
+	player 
+		left join
+	game_logs on (player.player_id = game_logs.player_id)
+GROUP BY 
+	player.login
+ORDER BY 
+	4 DESC;
 
 
-# Oblicz ile czasu każdy z graczy spędził na naszej platformie
+INSERT INTO player_has_game VALUES (default, 1, 5);
+insert into game_logs VALUES (default, 1, 5, "2019-09-03 23:00:00", 2020);
 
-
-
-
+# Ile każdy z graczy logował się na platformie
 
 
 
