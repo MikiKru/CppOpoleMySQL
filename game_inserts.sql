@@ -46,3 +46,36 @@ insert into game values (default, "World of Warcraft","Idk just a Blizzard rpg t
 insert into game values (default, "Enter the Gungeon","just try it out... seriously.. just do it..","10","David Rubel,Brent Sodman",15,"2016-04-05");
 
 select * from game;
+
+select * from game where author like '%lizzard%';
+
+select * from game where price between 10 and 100;
+select * from game where rating = "8" or rating = "9" or rating = "10" order by rating DESC, name ASC;
+
+# gra najlepsza w stosunku jakości do ceny
+select * from game where rating = "10" order by rating DESC, price ASC limit 1;
+# gra najgorsza w stosunku jakkości do ceny
+select * from game where rating = "0" order by rating DESC, price DESC limit 1;
+
+# średnia cena
+select round(avg(price),2) as 'średna cena gry' from game;
+
+# średnia cena gry dla każego ratingu
+select rating, round(avg(price),2) as 'średna cena gry' from game group by rating;
+
+# ile jest gier w ramach każdego ratingu
+select rating, count(*) from game group by rating;
+
+
+# Utworzenie tabeli relacyjnej
+CREATE TABLE player_has_game(
+	player_has_game_id int primary key auto_increment,
+    player_id int not null,
+    game_id int not null,
+    foreign key (player_id) references player(player_id), 	# klucz obcy z tabeli player
+    foreign key (game_id) references game(game_id)			# klucz obcy z tabeli game
+);
+
+
+
+
