@@ -1,3 +1,15 @@
+drop table game;
+
+CREATE TABLE game(
+	game_id int primary key auto_increment,
+    name varchar(255) not null,
+    description longtext not null,
+    rating enum('0','1','2','3','4','5','6','7','8','9','10') not null,
+    author varchar(255) not null,
+    price double(9,2) default 10.0,
+    releaseDate datetime default now()
+);
+
 insert into game values(default,"Rainbow Six Siege","fajna gra","8","Ubisoft",249.99,"2020-05-06");
 insert into game values(default,"Diablo IV","Swietny H&S","10","Blizzard",299.99,"2023-05-14");
 insert into game values(default,"Starcraft II","super tactic game","7","Blizzard",199.99,"1999-10-30");
@@ -33,4 +45,4 @@ insert into game values (default, "Half life 2","One of the best games ever, you
 insert into game values (default, "World of Warcraft","Idk just a Blizzard rpg that will suck you right in so ps buy","10","Blizzard Entertainment",15.52,"2004-11-23");
 insert into game values (default, "Enter the Gungeon","just try it out... seriously.. just do it..","10","David Rubel,Brent Sodman",15,"2016-04-05");
 
-
+select * from game;
