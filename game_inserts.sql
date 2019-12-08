@@ -241,6 +241,7 @@ LIMIT
 OFFSET 
 	1;
     
+
 # ile jest gier na naszej platformie
 SELECT count(*) as 'ilość' FROM game;
 
@@ -248,6 +249,11 @@ SELECT * FROM player_has_game;
 # ile jest gier na naszej platformie które ktoś kupił
 SELECT count(distinct game_id) as 'ilość' FROM player_has_game;
 
+SET @discount = 50;
+# BLACK FRIDAY -> obniż ceny wszystkich gier o 50%
+UPDATE game SET price = price * (1 - @discount/100);
+
+SELECT * FROM game;
 
 
 
